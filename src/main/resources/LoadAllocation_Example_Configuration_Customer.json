@@ -1,0 +1,76 @@
+{
+	"version": "v0.1",
+	"seed": 74982683645856,
+	"rows": 10,
+	"problem": "LoadAllocation_Customer",
+	"no_duplicates": true,
+	"comments": [
+		{
+			"comment": "Generates the demand for the customers in a load allocation problem."
+		}
+	],
+	"parameters": [
+		
+	],
+	"attributes": [
+		{
+			"name": "n",
+			"type": "id",
+			"start": 1,
+			"increment": 1,
+			"output": true
+		},
+		{
+			"name": "E_i",
+			"type": "integer",
+			"min": 0,
+			"max": 70,
+			"output": true
+		},
+		{
+			"name": "L_i",
+			"type": "integer",
+			"min": 20,
+			"max": 95,
+			"default": 95,
+			"output": true
+		},
+		{
+			"name": "tau_i",
+			"type": "integer",
+			"min": 2,
+			"max": 20,
+			"default": 4,
+			"output": true
+		},
+		{
+			"name": "d_i",
+			"type": "integer",
+			"min": 1,
+			"max": 10,
+			"default": 2,
+			"output": true
+		},
+		{
+			"name": "beta_i",
+			"type": "integer",
+			"min": 1,
+			"max": 10,
+			"output": true
+		}
+	],
+	"constraints": [
+		{
+			"name": "L_i >= E_i + tau_i",
+			"left": {
+				"type": "attribute",
+				"value": "L_i"
+			},
+			"relation": ">=",
+			"right": {
+				"type": "expression",
+				"value": "E_i + tau_i"
+			}
+		}
+	]
+}

@@ -1,0 +1,45 @@
+{
+	"version": "v0.1",
+	"seed": -74982683645857,
+	"rows": 10,
+	"problem": "LoadAllocation_Supplier",
+	"no_duplicates": true,
+	"comments": [
+		{
+			"comment": "Generates the amount of energy a supplier provides as a step function for a load allocation problem."
+		},
+		{
+			"comment": "Time (t) is provided as a number between 0 and 95 which are the number of 15 minute time intervals during a day."
+		}
+	],
+	"parameters": [
+		
+	],
+	"attributes": [
+		{
+			"name": "t",
+			"type": "id",
+			"start": 0,
+			"minIncrement": 2,
+			"stop": 96,
+			"seed": 9173537283638,
+			"output": true
+		},
+		{
+			"name": "P_t",
+			"type": "integer",
+			"min": 0,
+			"max": 10,
+			"output": true
+		},
+		{
+			"name": "alpha_t",
+			"type": "integer",
+			"min": 1,
+			"max": 10,
+			"output": true
+		}
+	],
+	"constraints": [
+	]
+}

@@ -1,0 +1,42 @@
+{
+	"version": "v0.1",
+	"rows": 1000,
+	"problem": "TSP",
+	"seed": -198465108435,
+	"no_duplicates": true,
+	"print_parameters": true,
+	"comments": [
+	],
+	"parameters": [
+		{
+			"name": "cities",
+			"type": "integer",
+			"value": 1000
+		}
+	],
+	"attributes": [
+		{
+			"name": "id",
+			"type": "id",
+			"start": 1,
+			"increment": 1,
+			"output": true
+		},
+		{
+			"name": "x",
+			"type": "double",
+			"min": 0.0,
+			"max": 10000.0,
+			"output": true
+		},
+		{
+			"name": "y",
+			"type": "double",
+			"min": 0.0,
+			"max": 10000.0,
+			"output": true
+		}
+	],
+	"constraints": [
+	]
+}

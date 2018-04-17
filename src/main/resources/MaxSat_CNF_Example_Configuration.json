@@ -1,0 +1,138 @@
+{
+	"version": "v0.1",
+	"seed": 4764598435602837,
+	"rows": 100,
+	"problem": "MaxSat",
+	"no_duplicates": true,
+	"print_parameters": true,
+	"separator": " ",
+	"comment_prefix": "c",
+	"alternative_header": "p cnf 4 100",
+	"comments": [
+		{
+			"comment": "Generates an instance of the MaxSat problem."
+		},
+		{
+			"comment": "Since a seed is provided, the same instance will be created every time."
+		}
+	],
+	"parameters": [
+		{
+			"name": "type",
+			"type": "nominal",
+			"value": "cnf"
+		},
+		{
+			"name": "clauses",
+			"type": "integer",
+			"value": 100
+		},
+		{
+			"name": "variables",
+			"type": "integer",
+			"value": 4
+		}
+	],
+	"attributes": [
+		{
+			"name": "i",
+			"type": "integer",
+			"min": -4,
+			"max": 4,
+			"output": true
+		},
+		{
+			"name": "j",
+			"type": "integer",
+			"min": -4,
+			"max": 4,
+			"output": true
+		},
+		{
+			"name": "k",
+			"type": "integer",
+			"min": -4,
+			"max": 4,
+			"output_probability": 0.3
+		},
+		{
+			"name": "zero",
+			"type": "integer",
+			"value": 0
+		}
+	],
+	"constraints": [
+		{
+			"name": "i!=j",
+			"left": {
+				"type": "expression",
+				"value": "abs(i)"
+			},
+			"relation": "!=",
+			"right": {
+				"type": "expression",
+				"value": "abs(j)"
+			}
+		},
+		{
+			"name": "k!=j",
+			"left": {
+				"type": "expression",
+				"value": "abs(k)"
+			},
+			"relation": "!=",
+			"right": {
+				"type": "expression",
+				"value": "abs(j)"
+			}
+		},
+		{
+			"name": "k!=i",
+			"left": {
+				"type": "expression",
+				"value": "abs(k)"
+			},
+			"relation": "!=",
+			"right": {
+				"type": "expression",
+				"value": "abs(i)"
+			}
+		},
+		{
+			"name": "no_i_zero",
+			"left": {
+				"type": "attribute",
+				"value": "i"
+			},
+			"relation": "!=",
+			"right": {
+				"type": "integer",
+				"value": 0
+			}
+		},
+		{
+			"name": "no_j_zero",
+			"left": {
+				"type": "attribute",
+				"value": "j"
+			},
+			"relation": "!=",
+			"right": {
+				"type": "integer",
+				"value": 0
+			}
+		},
+		{
+			"name": "no_k_zero",
+			"left": {
+				"type": "attribute",
+				"value": "k"
+			},
+			"relation": "!=",
+			"right": {
+				"type": "integer",
+				"value": 0
+			}
+		}
+	]
+}
