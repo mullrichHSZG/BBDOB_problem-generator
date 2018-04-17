@@ -15,14 +15,13 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * Class for generating test data for data mining.
+ * Class that will use the configuration to create the test instances, check the constraints and write the generated data to a .csv file.
  * @author Markus Ullrich
  *
  */
 public class TestDataGenerator {
 
-	private String newline = System.getProperty("line.separator");
-	private String valueSeparator = ";";
+	private final String newline = System.getProperty("line.separator");
 
 	private ProblemGenerationConfiguration config;
 
@@ -40,7 +39,7 @@ public class TestDataGenerator {
 				if (possibleDistinctRows >= config.getNumberOfRows())
 					break;
 			}
-			constraintsMet &= config.getNumberOfRows() <= possibleDistinctRows;
+			constraintsMet = config.getNumberOfRows() <= possibleDistinctRows;
 		}
 		for (ProblemGenerationConstraint constraint : config.getProblemGenerationConstraintList()) {
 			constraintsMet &= constraint.isPossible();
@@ -51,50 +50,50 @@ public class TestDataGenerator {
 	private StringBuilder generateComments() {
 		String commentPrefix = config.getCommentPrefix();
 		StringBuilder commentString = new StringBuilder();
-		commentString.append(commentPrefix + newline);
-		commentString.append(commentPrefix + " Problem instance for: " + config.getProblemName() + newline);
-		commentString.append(commentPrefix + newline);
-		commentString.append(commentPrefix + " Created with ProblemGenerator version: " + config.getVersion() + newline);
-		commentString.append(commentPrefix + newline);
-		commentString.append(commentPrefix + " Java version used: " + System.getProperty("java.version") + newline);
-		commentString.append(commentPrefix + newline);
-		commentString.append(commentPrefix + " Global seed for randomness: " + config.getGlobalSeed() + newline);
-		commentString.append(commentPrefix + newline);
+		commentString.append(commentPrefix).append(newline);
+		commentString.append(commentPrefix).append(" Problem instance for: ").append(config.getProblemName()).append(newline);
+		commentString.append(commentPrefix).append(newline);
+		commentString.append(commentPrefix).append(" Created with ProblemGenerator version: ").append(config.getVersion()).append(newline);
+		commentString.append(commentPrefix).append(newline);
+		commentString.append(commentPrefix).append(" Java version used: ").append(System.getProperty("java.version")).append(newline);
+		commentString.append(commentPrefix).append(newline);
+		commentString.append(commentPrefix).append(" Global seed for randomness: ").append(config.getGlobalSeed()).append(newline);
+		commentString.append(commentPrefix).append(newline);
 		boolean additionalSeedsMentioned = false;
 		for (ProblemGenerationAttribute attribute : config.getProblemGenerationAttributeList()) {
 			if (attribute.getLocalSeed() != null) {
 				if (!additionalSeedsMentioned) {
 					additionalSeedsMentioned = true;
-					commentString.append(commentPrefix + " The following local seeds have been used:" + newline);
+					commentString.append(commentPrefix).append(" The following local seeds have been used:").append(newline);
 				}
-				commentString.append(commentPrefix + " " + attribute.getLocalSeed() + " for " + attribute.getType().getName() + newline);
+				commentString.append(commentPrefix).append(" ").append(attribute.getLocalSeed()).append(" for ").append(attribute.getType().getName()).append(newline);
 			}
 		}
-		commentString.append(commentPrefix + newline);
+		commentString.append(commentPrefix).append(newline);
 		if (config.isPrintParameters()) {
 			boolean parametersMentioned = false;
 			for (ProblemGenerationParameter param : config.getGenerateParameterList()) {
 				if (!parametersMentioned) {
 					parametersMentioned = true;
-					commentString.append(commentPrefix + " Problem Parameters:" + newline);
+					commentString.append(commentPrefix).append(" Problem Parameters:").append(newline);
 				}
-				commentString.append(commentPrefix + " " + param.getName() + ": " + param.getDataType().getDefaultValue() + newline);
+				commentString.append(commentPrefix).append(" ").append(param.getName()).append(": ").append(param.getDataType().getDefaultValue()).append(newline);
 			}
-			commentString.append(commentPrefix + newline);
+			commentString.append(commentPrefix).append(newline);
 		}
 		if (!config.getComments().isEmpty()) {
-			commentString.append(commentPrefix + " Additional comments:" + newline);
+			commentString.append(commentPrefix).append(" Additional comments:").append(newline);
 			for (String comment : config.getComments()) {
-				commentString.append(commentPrefix + " " + comment + newline);
+				commentString.append(commentPrefix).append(" ").append(comment).append(newline);
 			}
-			commentString.append(commentPrefix + newline);
+			commentString.append(commentPrefix).append(newline);
 		}
 		return commentString;
 	}
 
 	public void generateAndWriteToFile(File testDataFile) throws IOException {
 		config.getProblemData().setConfiguration(config);
-		this.valueSeparator = config.getSeparator();
+		String valueSeparator = config.getSeparator();
 		IGenerateDataType[] order = this.orderTypesByConstraints();
 		if (!this.checkConstraints()) {
 			throw new IllegalStateException("Some constraints cannot be met, please check the configuration and try again.");
@@ -102,19 +101,17 @@ public class TestDataGenerator {
 		//TODO: RegExp support
 
 		if(!testDataFile.exists()){
-			/*if(!testDataFile.getParentFile().exists()){
-				testDataFile.getParentFile().mkdirs();
-			}*/
+			//noinspection ResultOfMethodCallIgnored
 			testDataFile.createNewFile();
 		}
-		StringBuffer outputString = new StringBuffer();
+		StringBuilder outputString = new StringBuilder();
 		outputString.append(this.generateComments());
 
 		if (config.getAlternativeHeader() == null) {
 			for (int index = 0; index < config.getProblemGenerationAttributeList().size(); index++) {
 				ProblemGenerationAttribute attribute = config.getProblemGenerationAttributeList().get(index);
 				if (attribute.isOutput())
-					outputString.append(attribute.getType().getName() + valueSeparator);
+					outputString.append(attribute.getType().getName()).append(valueSeparator);
 			}
 			outputString.replace(outputString.length() - 1, outputString.length(), "");
 		} else {
@@ -127,10 +124,8 @@ public class TestDataGenerator {
 			for (int index = 0 ; index < config.getProblemGenerationAttributeList().size() ; index++) {
 				ProblemGenerationAttribute attribute = config.getProblemGenerationAttributeList().get(index);
 				if(attribute.isOutput())
-					if (attribute.isOutputProbabilitySet() && config.getGlobalRandom().nextDouble() > attribute.getOutputProbability()) {
-						//Do nothing
-					} else {
-						outputString.append(config.getProblemData().getLastValueFor(attribute.getType().getName()) + valueSeparator);
+					if (!attribute.isOutputProbabilitySet() || config.getGlobalRandom().nextDouble() <= attribute.getOutputProbability()) {
+						outputString.append(config.getProblemData().getLastValueFor(attribute.getType().getName())).append(valueSeparator);
 					}
 			}
 			outputString.replace(outputString.length() - 1, outputString.length(), "");
@@ -146,7 +141,6 @@ public class TestDataGenerator {
 	private IGenerateDataType[] orderTypesByConstraints() {
 		IGenerateDataType[] order = new IGenerateDataType[config.getProblemData().getDataTypes().size()];
 		List<IGenerateDataType> noIncomingEdges = new ArrayList<>();
-		List<IGenerateDataType> incomingEdges = new ArrayList<>();
 		List<ProblemGenerationConstraint> constraintCopyList = new ArrayList<>();
 		for (ProblemGenerationConstraint constraint : config.getProblemGenerationConstraintList()) {
 			constraintCopyList.add(constraint);
@@ -158,14 +152,15 @@ public class TestDataGenerator {
 				if (attribute.getType().getName().equals(constraint.getLeft().getDataTypeName()) ||
 						attribute.getType().getName().equals(constraint.getLeft().getSecondDataTypeName())) {
 					//also check that the right side is not numbers only
+					//noinspection StatementWithEmptyBody
 					if ((constraint.getRight().getDataTypeName() == null ||
 							config.getProblemData().getTypeForName(constraint.getRight().getDataTypeName()) == null) &&
 								(constraint.getRight().getSecondDataTypeName() == null ||
 									config.getProblemData().getTypeForName(constraint.getRight().getSecondDataTypeName()) == null)) {
 						//All good
 					} else {
+						//incoming edge found
 						noLeftConstraints = false;
-						incomingEdges.add(attribute.getType());
 						break;
 					}
 				}
@@ -192,7 +187,7 @@ public class TestDataGenerator {
 					}
 				}
 				if (nextType.getName().equals(constraint.getRight().getSecondDataTypeName())) {
-					//it can also be the seconf type
+					//it can also be the second type
 					if (constraint.getRight().getDataTypeName() == null ||
 							noIncomingEdges.contains(config.getProblemData().getTypeForName(constraint.getRight().getDataTypeName()))) {
 						this.addTypesFromExpressionNoDuplicates(haveEdgeFromType, constraint.getLeft());
@@ -206,6 +201,7 @@ public class TestDataGenerator {
 				for (ProblemGenerationConstraint constraint : constraintCopyList) {
 					if (edgeType.getName().equals(constraint.getLeft().getDataTypeName()) ||
 							edgeType.getName().equals(constraint.getLeft().getSecondDataTypeName())) {
+						//noinspection StatementWithEmptyBody
 						if ((constraint.getRight().getDataTypeName() == null ||
 								config.getProblemData().getTypeForName(constraint.getRight().getDataTypeName()) == null) &&
 								(constraint.getRight().getSecondDataTypeName() == null ||

@@ -14,7 +14,7 @@ import java.util.*;
  * @author Markus Ullrich
  *
  */
-public class NumericGenerateDataType extends NumericDatatype {
+public class NumericGenerateDataType extends NumericDataType {
 
 	private double lowerBound, upperBound, defaultValue;
 	private CompressionList<Double> compressedValues;
@@ -41,6 +41,7 @@ public class NumericGenerateDataType extends NumericDatatype {
 	 * @param rowCount - The number of rows that have to be generated.
 	 * @throws IllegalArgumentException - if the lower bound is greater than the upper bound or if the number of rows is lower than all possible integer values within the boundaries and useAllValues is set to true.
 	 */
+	@SuppressWarnings("unused")
 	public NumericGenerateDataType(String name, double lowerBound, double upperBound, boolean integerMode, double defaultValue, boolean useAllValues, long rowCount) {
 		super(name);
 		this.compressedValues = new CompressionList<>();
@@ -136,6 +137,7 @@ public class NumericGenerateDataType extends NumericDatatype {
 	 * @throws IllegalArgumentException - if the lower bound is greater than the current upper bound
 	 * @throws MethodNotAllowedException - if useAllValues has been set to true during the creation of the generator.
 	 */
+	@SuppressWarnings("unused")
 	public void setLowerBound(double lowerBound) throws MethodNotAllowedException {
 		if(this.useValueList) {
 			throw new MethodNotAllowedException("Cannot change boundaries when useAllValues has been set to true.");
@@ -152,6 +154,7 @@ public class NumericGenerateDataType extends NumericDatatype {
 	 * @throws IllegalArgumentException - if the higher bound is smaller than the current lower bound
 	 * @throws MethodNotAllowedException - if useAllValues has been set to true during the creation of the generator.
 	 */
+	@SuppressWarnings("unused")
 	public void setUpperBound(double upperBound) throws MethodNotAllowedException {
 		if(this.useValueList) {
 			throw new MethodNotAllowedException("Cannot change boundaries when useAllValues has been set to true.");
@@ -196,6 +199,7 @@ public class NumericGenerateDataType extends NumericDatatype {
 				+ upperBound + ", defaultValue=" + defaultValue + "]";
 	}
 
+	@SuppressWarnings("unused")
 	public CompressionList<Double> getCompressedValues() {
 		return this.compressedValues;
 	}
@@ -233,6 +237,7 @@ public class NumericGenerateDataType extends NumericDatatype {
 			reShuffleCounter = 0;
 			//possibly too many failed attempts using the next value from the pre-generated list
 			//in case a list is used, the remaining values will be re-shuffled
+            //TODO: this is a side effect and should be moved to a different method
 			if (!this.valueList.isEmpty()) {
 				List<Double> replacementList = new ArrayList<>();
 				for (int i = valueIndex ; i < this.valueList.size() ; i++){

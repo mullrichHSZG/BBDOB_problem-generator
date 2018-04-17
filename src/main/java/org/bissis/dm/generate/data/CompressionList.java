@@ -5,8 +5,10 @@ import org.bissis.dm.utility.ValueCompression;
 import java.util.ArrayList;
 
 /**
- * Created by bissi on 13.03.2018.
+ * A simple list for numeric values that also supports calculating several compression values for all elements in this list.
+ * @author Markus Ullrich
  */
+@SuppressWarnings("unused")
 public class CompressionList<T extends Number>{
 
     private ArrayList<T> values;
@@ -20,6 +22,10 @@ public class CompressionList<T extends Number>{
         this.min = Double.POSITIVE_INFINITY;
     }
 
+    /**
+     * Adds a value to this list and calculates the new average, min, max total values.
+     * @param value the new value
+     */
     public void addValue(T value){
         this.values.add(value);
         double doubleValue = value.doubleValue();

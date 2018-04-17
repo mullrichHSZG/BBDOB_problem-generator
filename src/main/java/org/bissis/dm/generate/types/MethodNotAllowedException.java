@@ -1,11 +1,12 @@
 package org.bissis.dm.generate.types;
 
 /**
- * Created by bissi on 23.03.2018.
+ * Exception that should be thrown if a certain method cannot be used to modify the values of a generator.
+ * @author Markus Ullrich
  */
-public class MethodNotAllowedException extends Exception {
+class MethodNotAllowedException extends Exception {
 
-    public MethodNotAllowedException(String message) {
+    MethodNotAllowedException(String message) {
         super(message);
     }
 

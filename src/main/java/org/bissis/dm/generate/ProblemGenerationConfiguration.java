@@ -11,16 +11,15 @@ import org.json.simple.JSONObject;
 import java.util.*;
 
 /**
- * Created by bissi on 11.03.2018.
+ * Java object for the configuration of the problem instance generator.
+ * @author Markus Ullrich
  */
 public class ProblemGenerationConfiguration {
 
-    private static final String ROWS = "rows";
-
     private long globalSeed;
     private Random globalRandom;
-    private String version = "v0.1"; //TODO: read version from pom?
-    private List<String> comments;
+    private String version = "v0.1"; //TODO: read version from pom? - probably not, since the version should not be utilized
+    private List<String> comments; //TODO: ensure that future implementations will generate the same values every time - what about bug fixes?
     private String problemName;
     private boolean noDuplicates;
     private boolean printParameters;
@@ -36,6 +35,12 @@ public class ProblemGenerationConfiguration {
 
     private String alternativeHeader;
 
+    /**
+     * Constructor for the problem generator configuration.
+     * Takes care of extracting the configuration values from a JSON object.
+     * @param jsonConfig - The configuration values in a JSON object.
+     */
+    @SuppressWarnings("WhileLoopReplaceableByForEach")
     public ProblemGenerationConfiguration(JSONObject jsonConfig) {
         this.problemData = new ProblemData();
         this.version = (String) jsonConfig.get("version");
@@ -66,32 +71,32 @@ public class ProblemGenerationConfiguration {
         }
         this.comments = new ArrayList<>();
         JSONArray commentArray = (JSONArray) jsonConfig.get("comments");
-        Iterator<JSONObject> commentIter = commentArray.iterator();
+        Iterator commentIter = commentArray.iterator();
         while(commentIter.hasNext()) {
-            final JSONObject comment = commentIter.next();
+            final JSONObject comment = (JSONObject) commentIter.next();
             this.comments.add((String) comment.get("comment"));
         }
         this.generateParameterList = new ArrayList<>();
         JSONArray parameterArray = (JSONArray) jsonConfig.get("parameters");
-        Iterator<JSONObject> paramIter = parameterArray.iterator();
+        Iterator paramIter = parameterArray.iterator();
         while(paramIter.hasNext()) {
-            final JSONObject parameter = paramIter.next();
+            final JSONObject parameter = (JSONObject) paramIter.next();
             this.generateParameterList.add(new ProblemGenerationParameter(parameter));
         }
         this.problemGenerationAttributeList = new ArrayList<>();
         JSONArray attributeArray = (JSONArray) jsonConfig.get("attributes");
-        Iterator<JSONObject> attrIter = attributeArray.iterator();
+        Iterator attrIter = attributeArray.iterator();
         while (attrIter.hasNext()) {
-            final JSONObject attribute = attrIter.next();
+            final JSONObject attribute = (JSONObject) attrIter.next();
             ProblemGenerationAttribute problemGenerationAttribute = new ProblemGenerationAttribute(attribute, this.problemData, this.getGlobalRandom(), this.numberOfRows);
             this.problemData.addDataType(problemGenerationAttribute.getType());
             this.problemGenerationAttributeList.add(problemGenerationAttribute);
         }
         this.problemGenerationConstraintList = new ArrayList<>();
         JSONArray constraintArray = (JSONArray) jsonConfig.get("constraints");
-        Iterator<JSONObject> constIter = constraintArray.iterator();
+        Iterator constIter = constraintArray.iterator();
         while (constIter.hasNext()) {
-            final JSONObject constraint = constIter.next();
+            final JSONObject constraint = (JSONObject) constIter.next();
             this.problemGenerationConstraintList.add(new ProblemGenerationConstraint(constraint, this.problemData));
         }
         for (ProblemGenerationAttribute attribute : this.problemGenerationAttributeList) {
@@ -101,7 +106,7 @@ public class ProblemGenerationConfiguration {
         }
     }
 
-    public long getGlobalSeed() {
+    long getGlobalSeed() {
         return globalSeed;
     }
 
@@ -109,11 +114,11 @@ public class ProblemGenerationConfiguration {
         return version;
     }
 
-    public List<String> getComments() {
+    List<String> getComments() {
         return comments;
     }
 
-    public String getProblemName() {
+    String getProblemName() {
         return problemName;
     }
 
@@ -121,7 +126,7 @@ public class ProblemGenerationConfiguration {
         return noDuplicates;
     }
 
-    public boolean isPrintParameters() {
+    boolean isPrintParameters() {
         return this.printParameters;
     }
 
@@ -129,35 +134,35 @@ public class ProblemGenerationConfiguration {
         return numberOfRows;
     }
 
-    public String getCommentPrefix() {
+    String getCommentPrefix() {
         return this.commentPrefix;
     }
 
-    public String getSeparator (){
+    String getSeparator (){
         return this.separator;
     }
 
-    public List<ProblemGenerationAttribute> getProblemGenerationAttributeList() {
+    List<ProblemGenerationAttribute> getProblemGenerationAttributeList() {
         return problemGenerationAttributeList;
     }
 
-    public ProblemData getProblemData() {
+    ProblemData getProblemData() {
         return this.problemData;
     }
 
-    public List<ProblemGenerationParameter> getGenerateParameterList() {
+    List<ProblemGenerationParameter> getGenerateParameterList() {
         return generateParameterList;
     }
 
-    public List<ProblemGenerationConstraint> getProblemGenerationConstraintList() {
+    List<ProblemGenerationConstraint> getProblemGenerationConstraintList() {
         return problemGenerationConstraintList;
     }
 
-    public String getAlternativeHeader() {
+    String getAlternativeHeader() {
         return alternativeHeader;
     }
 
-    public Random getGlobalRandom() {
+    Random getGlobalRandom() {
         return globalRandom;
     }
 }

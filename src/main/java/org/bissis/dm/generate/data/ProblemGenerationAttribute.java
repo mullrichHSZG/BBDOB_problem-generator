@@ -1,6 +1,5 @@
 package org.bissis.dm.generate.data;
 
-import org.bissis.dm.generate.expressions.IExpression;
 import org.bissis.dm.generate.types.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -9,8 +8,11 @@ import java.util.Iterator;
 import java.util.Random;
 
 /**
- * Created by bissi on 11.03.2018.
+ * Class for managing a single attribute.
+ * Basically, it stores the generator (or data type) and several other configuration values.
+ * @author Markus Ullrich
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class ProblemGenerationAttribute {
 
     private String name;
@@ -23,6 +25,7 @@ public class ProblemGenerationAttribute {
     private double outputProbability;
     private boolean outputProbabilitySet;
 
+    @SuppressWarnings("ConstantConditions")
     public ProblemGenerationAttribute(JSONObject jsonAttribute, ProblemData problemData, Random globalRandom, long rowCount) {
         this.name = (String) jsonAttribute.get("name");
         Boolean useAllValues = (Boolean) jsonAttribute.get("use_all_values");
@@ -106,14 +109,15 @@ public class ProblemGenerationAttribute {
             case ("Gaussian") : {
                 double mean = (Double) jsonAttribute.get("mean");
                 double standard_deviation = (Double) jsonAttribute.get("standard_deviation");
-                this.type = new GaussianDistributionDatatype(this.name, mean, standard_deviation, useLocalSeed ? new Random(localSeed) : globalRandom, false);
+                this.type = new GaussianDistributionDataType(this.name, mean, standard_deviation, useLocalSeed ? new Random(localSeed) : globalRandom, false);
                 break;
             } case ("nominal") : {
                 JSONArray values = (JSONArray) jsonAttribute.get("values");
                 this.type = new NominalGenerateDataType(this.name);
-                Iterator<JSONObject> iter = values.iterator();
+                Iterator iter = values.iterator();
+                //noinspection WhileLoopReplaceableByForEach
                 while(iter.hasNext()) {
-                    JSONObject value = iter.next();
+                    JSONObject value = (JSONObject) iter.next();
                     Boolean defaultValue = (Boolean) value.get("default");
                     ((NominalGenerateDataType) this.type).addOption( (String) value.get("value"), defaultValue == null ? false : defaultValue);
                 }

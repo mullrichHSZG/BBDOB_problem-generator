@@ -1,7 +1,7 @@
 package org.bissis.dm.generate.expressions;
 
 import org.bissis.dm.generate.data.ProblemData;
-import org.bissis.dm.generate.types.NumericDatatype;
+import org.bissis.dm.generate.types.NumericDataType;
 
 import java.text.DecimalFormat;
 import java.util.Locale;
@@ -13,7 +13,7 @@ import java.util.Locale;
  * or an identifier for a data type.
  * However, at least one value has to
  * represent an identifier.
- * Created by bissi on 13.03.2018.
+ * @author Markus Ullrich
  */
 public class ArithmeticExpression implements IExpression {
 
@@ -113,14 +113,15 @@ public class ArithmeticExpression implements IExpression {
         return secondDataTypeName;
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public double getMinValue(ProblemData problemData) {
         double returnValue = Double.NaN;
-        double lowerBound = ((NumericDatatype) problemData.getTypeForName(this.dataTypeName)).getTotalLowerBound();
-        double upperBound = ((NumericDatatype) problemData.getTypeForName(this.dataTypeName)).getTotalUpperBound();
+        double lowerBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getTotalLowerBound();
+        double upperBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getTotalUpperBound();
         if (useSecondValue) {
-            double secondLowerBound = ((NumericDatatype) problemData.getTypeForName(this.secondDataTypeName)).getTotalLowerBound();
-            double secondUpperBound = ((NumericDatatype) problemData.getTypeForName(this.secondDataTypeName)).getTotalUpperBound();
+            double secondLowerBound = ((NumericDataType) problemData.getTypeForName(this.secondDataTypeName)).getTotalLowerBound();
+            double secondUpperBound = ((NumericDataType) problemData.getTypeForName(this.secondDataTypeName)).getTotalUpperBound();
             returnValue = evaluateMinExpression(returnValue, lowerBound, upperBound, secondLowerBound, secondUpperBound);
         } else {
             returnValue = evaluateMinExpression(returnValue, lowerBound, upperBound, secondValue, secondValue);
@@ -156,17 +157,18 @@ public class ArithmeticExpression implements IExpression {
         return returnValue;
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public double getMaxValue(ProblemData problemData) {
         double returnValue = Double.NaN;
-        double lowerBound = ((NumericDatatype) problemData.getTypeForName(this.dataTypeName)).getTotalLowerBound();
-        double upperBound = ((NumericDatatype) problemData.getTypeForName(this.dataTypeName)).getTotalUpperBound();
+        double lowerBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getTotalLowerBound();
+        double upperBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getTotalUpperBound();
         if (useSecondValue) {
-            double secondLowerBound = ((NumericDatatype) problemData.getTypeForName(this.secondDataTypeName)).getTotalLowerBound();
-            double secondUpperBound = ((NumericDatatype) problemData.getTypeForName(this.secondDataTypeName)).getTotalUpperBound();
+            double secondLowerBound = ((NumericDataType) problemData.getTypeForName(this.secondDataTypeName)).getTotalLowerBound();
+            double secondUpperBound = ((NumericDataType) problemData.getTypeForName(this.secondDataTypeName)).getTotalUpperBound();
             returnValue = evaluateMinExpression(returnValue, upperBound, lowerBound, secondUpperBound, secondLowerBound);
         } else {
-            returnValue = evaluateMinExpression(returnValue, lowerBound, upperBound, secondValue, secondValue);
+            returnValue = evaluateMinExpression(returnValue, upperBound, lowerBound, secondValue, secondValue);
         }
         return Double.parseDouble(this.format.format(returnValue));
     }

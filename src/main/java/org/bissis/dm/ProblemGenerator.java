@@ -10,15 +10,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Random;
 
 /**
- * Created by bissi on 08.03.2018.
+ * Main class for the problem instance generator for executing the tool from the command line.
+ * @author Markus Ullrich
  */
 public class ProblemGenerator {
 
-    private static String NEWLINE = System.getProperty("line.separator");
-    private static String LINE = "------------------------------------------------------------------------------------------";
+    private static final String NEWLINE = System.getProperty("line.separator");
+    private static final String LINE = "------------------------------------------------------------------------------------------";
 
     public static void main (String[] args) {
         if(args.length > 0) {
@@ -49,10 +49,6 @@ public class ProblemGenerator {
                             }
 
                             System.exit(0);
-                            //TODO: Add Data Building from configuration to ProblemGenerator --> constraint dependency set
-                            //TODO: Add Constraint Check --> can be ignored/skipped --> only potentially impossible values (replaced with NaN), circle constraints still not allowed
-                            //TODO: Adjust data generation: new on-line constraint check with constraint dependency set
-                            //TODO: Add more information to data output
                             //TODO: check statistical properties of the output instances?
                         }
                     }

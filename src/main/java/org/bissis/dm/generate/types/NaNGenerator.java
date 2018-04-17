@@ -1,9 +1,10 @@
 package org.bissis.dm.generate.types;
 
 /**
- * Created by bissi on 13.03.2018.
+ * Class for a generator that only generates Double.NaN values.
+ * @author Markus Ullrich
  */
-public class NaNGenerator extends NumericDatatype {
+public class NaNGenerator extends NumericDataType {
 
     public NaNGenerator(String name) {
         super(name);
@@ -46,7 +47,7 @@ public class NaNGenerator extends NumericDatatype {
 
     @Override
     public void resetLastValue() {
-
+        //nothing to do here
     }
 
     @Override

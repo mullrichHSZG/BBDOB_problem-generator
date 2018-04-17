@@ -1,13 +1,13 @@
 package org.bissis.dm.generate.expressions;
 
 import org.bissis.dm.generate.data.ProblemData;
-import org.bissis.dm.generate.types.NumericDatatype;
+import org.bissis.dm.generate.types.NumericDataType;
 
 /**
  * This expression represents a single attribute
  * therefore, it will evaluate to the value of
  * the attribute only.
- * Created by bissi on 14.03.2018.
+ * @author Markus Ullrich
  */
 public class SimpleAttributeExpression implements IExpression {
 
@@ -39,11 +39,11 @@ public class SimpleAttributeExpression implements IExpression {
 
     @Override
     public double getMinValue(ProblemData problemData) {
-        return ((NumericDatatype) problemData.getTypeForName(this.name)).getTotalLowerBound();
+        return ((NumericDataType) problemData.getTypeForName(this.name)).getTotalLowerBound();
     }
 
     @Override
     public double getMaxValue(ProblemData problemData) {
-        return ((NumericDatatype) problemData.getTypeForName(this.name)).getTotalUpperBound();
+        return ((NumericDataType) problemData.getTypeForName(this.name)).getTotalUpperBound();
     }
 }

@@ -8,9 +8,9 @@ import java.util.Random;
  * This class functions similar to an {@link IDGenerateDataType}
  * however, the increment for the next generated value is random
  * and in between the provided boundaries.
- * Created by bissi on 24.11.2017.
+ * @author Markus Ullrich
  */
-public class RandomStepDataType extends NumericDatatype {
+public class RandomStepDataType extends NumericDataType {
 
     private long start, minIncrement, maxIncrement, lastIncrement, stop;
     private boolean preGenerated;

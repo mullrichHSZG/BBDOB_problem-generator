@@ -9,9 +9,9 @@ package org.bissis.dm.generate.types;
  * @author Markus Ullrich
  *
  */
-public abstract class NumericDatatype extends AbstractGenerateDataType {
+public abstract class NumericDataType extends AbstractGenerateDataType {
 
-	protected NumericDatatype(String name) {
+	protected NumericDataType(String name) {
 		super(name);
 	}
 
@@ -63,7 +63,7 @@ public abstract class NumericDatatype extends AbstractGenerateDataType {
 
 	/**
 	 * Returns true if this data type generates integer values only.
-	 * @return
+	 * @return true if only integers are generated
      */
 	public abstract boolean allowIntegersOnly();
 

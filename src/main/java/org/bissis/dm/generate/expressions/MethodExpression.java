@@ -1,7 +1,7 @@
 package org.bissis.dm.generate.expressions;
 
 import org.bissis.dm.generate.data.ProblemData;
-import org.bissis.dm.generate.types.NumericDatatype;
+import org.bissis.dm.generate.types.NumericDataType;
 import org.bissis.dm.utility.ValueCompression;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.List;
  * (min, max, avg, sum)
  * Only one identifier (dataTypeName)
  * can be used for this  expression.
- * Created by bissi on 13.03.2018.
+ * @author Markus Ullrich
  */
 public class MethodExpression implements IExpression {
 
@@ -75,8 +75,8 @@ public class MethodExpression implements IExpression {
 
     @Override
     public double getMinValue(ProblemData problemData) {
-        double lowerBound = ((NumericDatatype) problemData.getTypeForName(this.dataTypeName)).getTotalLowerBound();
-        double upperBound = ((NumericDatatype) problemData.getTypeForName(this.dataTypeName)).getTotalUpperBound();
+        double lowerBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getTotalLowerBound();
+        double upperBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getTotalUpperBound();
         switch (expression) {
             case ("sum"): {
                 return lowerBound * problemData.getConfiguration().getNumberOfRows();
@@ -102,8 +102,8 @@ public class MethodExpression implements IExpression {
 
     @Override
     public double getMaxValue(ProblemData problemData) {
-        double lowerBound = ((NumericDatatype) problemData.getTypeForName(this.dataTypeName)).getTotalLowerBound();
-        double upperBound = ((NumericDatatype) problemData.getTypeForName(this.dataTypeName)).getTotalUpperBound();
+        double lowerBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getTotalLowerBound();
+        double upperBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getTotalUpperBound();
         switch (expression) {
             case ("sum"): {
                 return upperBound * problemData.getConfiguration().getNumberOfRows();

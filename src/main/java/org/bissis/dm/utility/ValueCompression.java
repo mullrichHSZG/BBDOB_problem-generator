@@ -10,6 +10,7 @@ import java.util.Arrays;
  * @author Markus Ullrich
  *
  */
+@SuppressWarnings({"Duplicates", "unused"})
 public class ValueCompression {
 
 	/**

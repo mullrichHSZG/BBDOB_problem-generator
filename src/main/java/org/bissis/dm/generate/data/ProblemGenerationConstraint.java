@@ -2,12 +2,14 @@ package org.bissis.dm.generate.data;
 
 import org.bissis.dm.generate.expressions.*;
 import org.bissis.dm.generate.types.ExpressionDataType;
-import org.bissis.dm.generate.types.NumericDatatype;
+import org.bissis.dm.generate.types.NumericDataType;
 import org.json.simple.JSONObject;
 
 /**
- * Created by bissi on 11.03.2018.
+ * Class for storing a constraint used by the problem instance generator.
+ * @author Markus Ullrich
  */
+@SuppressWarnings("unused")
 public class ProblemGenerationConstraint {
 
     private String name;
@@ -100,15 +102,13 @@ public class ProblemGenerationConstraint {
                     String firstPart = expressionParts[0];
                     String operator = expressionParts[1];
                     String secondPart = expressionParts[2];
-                    boolean orderSwitched = false;
-                    boolean integerMode = false;
                     for (String dataType : this.problemData.getDataTypes()) {
                         if (dataType.equals(firstPart)) {
                             typeName = firstPart;
                             for (String dataType2 : this.problemData.getDataTypes()) {
                                 if (dataType2.equals(secondPart)) {
-                                    integerMode = ((NumericDatatype)this.problemData.getTypeForName(typeName)).allowIntegersOnly();
-                                    this.left = new ArithmeticExpression(typeName, secondPart, operator, integerMode, orderSwitched);
+                                    boolean integerMode = ((NumericDataType)this.problemData.getTypeForName(typeName)).allowIntegersOnly();
+                                    this.left = new ArithmeticExpression(typeName, secondPart, operator, integerMode, false);
                                     break;
                                 }
                             }
@@ -117,17 +117,18 @@ public class ProblemGenerationConstraint {
                     }
                     if (this.left == null) {
                         if (!firstPart.equals(typeName)) {
-                            orderSwitched = true;
+                            //the order of the operands is different than the arithmetic expression expects
                             for (String dataType : this.problemData.getDataTypes()) {
                                 if (dataType.equals(secondPart)) {
                                     typeName = secondPart;
-                                    integerMode = ((NumericDatatype) this.problemData.getTypeForName(typeName)).allowIntegersOnly();
-                                    this.left = new ArithmeticExpression(typeName, operator, Double.parseDouble(firstPart), integerMode, orderSwitched);
+                                    boolean integerMode = ((NumericDataType) this.problemData.getTypeForName(typeName)).allowIntegersOnly();
+                                    this.left = new ArithmeticExpression(typeName, operator, Double.parseDouble(firstPart), integerMode, true);
                                     break;
                                 }
                             }
                         } else {
-                            this.left = new ArithmeticExpression(typeName, operator, Double.parseDouble(secondPart), integerMode, orderSwitched);
+                            //no integer mode is the default
+                            this.left = new ArithmeticExpression(typeName, operator, Double.parseDouble(secondPart), false, false);
                         }
                     }
                 }
@@ -154,7 +155,6 @@ public class ProblemGenerationConstraint {
             switch (rightType) {
                 case ("expression"): {
                     String value = (String) jsonRight.get("value");
-                    //TODO: extract duplicated code into a method
                     String[] expressionParts = value.split(" ");
                     if(expressionParts.length == 1) {
                         //min, max, sum, avg
@@ -167,15 +167,13 @@ public class ProblemGenerationConstraint {
                         String firstPart = expressionParts[0];
                         String operator = expressionParts[1];
                         String secondPart = expressionParts[2];
-                        boolean orderSwitched = false;
-                        boolean integerMode = false;
                         for (String dataType : this.problemData.getDataTypes()) {
                             if (dataType.equals(firstPart)) {
                                 typeName = firstPart;
                                 for (String dataType2 : this.problemData.getDataTypes()) {
                                     if (dataType2.equals(secondPart)) {
-                                        integerMode = ((NumericDatatype)this.problemData.getTypeForName(typeName)).allowIntegersOnly();
-                                        this.right = new ArithmeticExpression(typeName, secondPart, operator, integerMode, orderSwitched);
+                                        boolean integerMode = ((NumericDataType)this.problemData.getTypeForName(typeName)).allowIntegersOnly();
+                                        this.right = new ArithmeticExpression(typeName, secondPart, operator, integerMode, false);
                                         break;
                                     }
                                 }
@@ -184,17 +182,17 @@ public class ProblemGenerationConstraint {
                         }
                         if (this.right == null) {
                             if (!firstPart.equals(typeName)) {
-                                orderSwitched = true;
+                                //the same as above applies here as well
                                 for (String dataType : this.problemData.getDataTypes()) {
                                     if (dataType.equals(secondPart)) {
                                         typeName = secondPart;
-                                        integerMode = ((NumericDatatype) this.problemData.getTypeForName(typeName)).allowIntegersOnly();
-                                        this.right = new ArithmeticExpression(typeName, operator, Double.parseDouble(firstPart), integerMode, orderSwitched);
+                                        boolean integerMode = ((NumericDataType) this.problemData.getTypeForName(typeName)).allowIntegersOnly();
+                                        this.right = new ArithmeticExpression(typeName, operator, Double.parseDouble(firstPart), integerMode, true);
                                         break;
                                     }
                                 }
                             } else {
-                                this.right = new ArithmeticExpression(typeName, operator, Double.parseDouble(secondPart), integerMode, orderSwitched);
+                                this.right = new ArithmeticExpression(typeName, operator, Double.parseDouble(secondPart), false, false);
                             }
                         }
                     }
@@ -262,6 +260,7 @@ public class ProblemGenerationConstraint {
                 break;
             }
             case NE: {
+                //noinspection RedundantIfStatement
                 if (this.left.getMinValue(problemData) == this.right.getMinValue(problemData) &&
                         this.left.getMaxValue(problemData) == this.right.getMaxValue(problemData) &&
                         this.left.getMinValue(problemData) == this.right.getMaxValue(problemData)) {
@@ -277,7 +276,7 @@ public class ProblemGenerationConstraint {
         return false;
     }
 
-    public boolean isStillPossible(long remainingRows, String currentLeft, String currentRight, ProblemData problemData) {
+    boolean isStillPossible(long remainingRows, String currentLeft, String currentRight, ProblemData problemData) {
         //TODO: works only if all values are numeric for now
         if (currentRight == null) {
             return true;
@@ -286,7 +285,7 @@ public class ProblemGenerationConstraint {
 
         //Only in case the constraint is global!
         /*
-        NumericDatatype leftType = (NumericDatatype) problemData.getTypeForName(this.left.getDataTypeName());
+        NumericDataType leftType = (NumericDataType) problemData.getTypeForName(this.left.getDataTypeName());
         switch (this.left.getExpression()) {
             case ("sum"): {
                 leftValue += remainingRows *  leftType.getTotalUpperBound();
@@ -319,7 +318,7 @@ public class ProblemGenerationConstraint {
 
         //Only in case the constraint is global!
         /*
-        NumericDatatype rightType = (NumericDatatype) problemData.getTypeForName(this.right.getDataTypeName());
+        NumericDataType rightType = (NumericDataType) problemData.getTypeForName(this.right.getDataTypeName());
         switch (this.right.getExpression()) {
             case ("sum"): {
                 rightValue += remainingRows *  rightType.getTotalUpperBound();
@@ -350,52 +349,35 @@ public class ProblemGenerationConstraint {
 
         if (this.relation == Relation.E) {
             //TODO: please refrain from using avg / sum and equals in combination
-            if (leftValue == rightValue)
-                return true;
-            else
-                return false;
+            return leftValue == rightValue;
         }
         if (this.relation == Relation.NE) {
-            if (leftValue != rightValue)
-                return true;
-            else
-                return false;
+            return leftValue != rightValue;
         }
         if (this.relation == Relation.GT) {
-            if (leftValue > rightValue)
-                return true;
-            else
-                return false;
+            return leftValue > rightValue;
         }
         if (this.relation == Relation.GE) {
-            if (leftValue >= rightValue)
-                return true;
-            else
-                return false;
+            return leftValue >= rightValue;
         }
         if (this.relation == Relation.LT) {
-            if (leftValue < rightValue)
-                return true;
-            else
-                return false;
+            return leftValue < rightValue;
         }
+        //noinspection SimplifiableIfStatement
         if (this.relation == Relation.LE) {
-            if (leftValue <= rightValue)
-                return true;
-            else
-                return false;
+            return leftValue <= rightValue;
         }
         return true;
     }
 
-    public enum Scope {
+    private enum Scope {
         ROW,
         BEFORE,
         AFTER,
         GLOBAL
     }
 
-    public enum Relation {
+    private enum Relation {
         GT,
         LT,
         GE,

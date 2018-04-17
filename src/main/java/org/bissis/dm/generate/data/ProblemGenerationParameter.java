@@ -7,13 +7,18 @@ import org.bissis.dm.generate.types.SimpleNumberDataType;
 import org.json.simple.JSONObject;
 
 /**
- * Created by bissi on 11.03.2018.
+ * A simple class for a parameter that might be used for the problem instance generator.
+ * @author Markus Ullrich
  */
 public class ProblemGenerationParameter {
 
     private String name;
     private IGenerateDataType type; //The type will provide the value
 
+    /**
+     * Creates a new ProblemGenerationParameter
+     * @param jsonParameter - the configuration values for this parameter as a JSONObject
+     */
     public ProblemGenerationParameter(JSONObject jsonParameter) {
         this.name = (String) jsonParameter.get("name");
         String typeName = (String) jsonParameter.get("type");

@@ -3,9 +3,11 @@ package org.bissis.dm.generate.types;
 import java.util.Random;
 
 /**
- * Created by bissi on 13.03.2018.
+ * Class for a data type that generates boolean values only.
+ * Further, the respective numeric representations (0,1) can be generated as well.
+ * @author Markus Ullrich
  */
-public class BooleanDataType extends NumericDatatype {
+public class BooleanDataType extends NumericDataType {
 
     private Random random;
     private double truePercentage = 0.5;
@@ -51,8 +53,9 @@ public class BooleanDataType extends NumericDatatype {
 
     /**
      * Changes the default value for this generator.
-     * @param defaultValue
+     * @param defaultValue - the new default value
      */
+    @SuppressWarnings("WeakerAccess")
     public void setDefaultValue(boolean defaultValue) {
         if (changeTruePercentage) {
             if (truePercentage > 0.5 && !defaultValue) {

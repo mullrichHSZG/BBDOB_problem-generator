@@ -6,9 +6,9 @@ import java.util.Locale;
 /**
  * Class for a simple numeric data type.
  * This class will generate the same value every time.
- * Created by bissi on 11.03.2018.
+ * @author Markus Ullrich
  */
-public class SimpleNumberDataType extends NumericDatatype {
+public class SimpleNumberDataType extends NumericDataType {
 
     private double number;
     private boolean integer;
@@ -71,7 +71,7 @@ public class SimpleNumberDataType extends NumericDatatype {
 
     @Override
     public void resetLastValue() {
-
+        //nothing to do here
     }
 
     @Override

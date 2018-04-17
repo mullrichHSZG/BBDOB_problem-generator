@@ -29,7 +29,7 @@ public class NominalGenerateDataType extends AbstractGenerateDataType {
 	 */
 	public NominalGenerateDataType(String typeName) {
 		super(typeName);
-		this.options = new ArrayList<String>();
+		this.options = new ArrayList<>();
 		this.defaultValue = null;
 		this.random = new Random();
 	}
@@ -51,6 +51,7 @@ public class NominalGenerateDataType extends AbstractGenerateDataType {
 	 * @param option - the option which should be removed
 	 * @return true if an option with the specified name could be found and removed, false otherwise
 	 */
+	@SuppressWarnings("WeakerAccess")
 	public boolean removeOption(String option) {
 		if(option.equals(this.defaultValue)){
 			this.defaultValue = null;

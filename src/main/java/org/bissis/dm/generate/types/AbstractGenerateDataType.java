@@ -2,8 +2,9 @@ package org.bissis.dm.generate.types;
 
 /**
  * Abstract class for data types.
- * Created by bissi on 11.03.2018.
+ * @author Markus Ullrich
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class AbstractGenerateDataType implements IGenerateDataType {
 
     private String name;

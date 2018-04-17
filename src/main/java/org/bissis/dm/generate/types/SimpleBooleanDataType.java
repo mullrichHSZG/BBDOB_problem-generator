@@ -3,7 +3,7 @@ package org.bissis.dm.generate.types;
 /**
  * Class for a simple boolean data type.
  * This class will generate the same value every time.
- * Created by bissi on 22.03.2018.
+ * @author Markus Ullrich
  */
 public class SimpleBooleanDataType extends AbstractGenerateDataType {
 
@@ -31,7 +31,7 @@ public class SimpleBooleanDataType extends AbstractGenerateDataType {
 
     @Override
     public void resetLastValue() {
-
+        //nothing to do here
     }
 
     @Override

@@ -5,9 +5,9 @@ package org.bissis.dm.generate.types;
  * Useful if the generated results should contain an ID column
  * or if it should be prevented that the generated value at a time
  * is always larger than the previous one.
- * Created by bissi on 24.11.2017.
+ * @author Markus Ullrich
  */
-public class IDGenerateDataType extends NumericDatatype {
+public class IDGenerateDataType extends NumericDataType {
 
     private final long initialStart;
     private long startValue = 0;

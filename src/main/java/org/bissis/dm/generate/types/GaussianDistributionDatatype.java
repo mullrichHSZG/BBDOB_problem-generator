@@ -9,9 +9,9 @@ import java.util.Random;
  * Mean and standard deviation are configurable and also determine the upper and lower bound of the generated values.
  * For now the default is mean +/- 3 * standard deviation. This should help to reduce the probability of long waiting
  * intervals during the generation process. Future versions might allow the configuration of these boundaries.
- * Created by bissi on 26.11.2017.
+ * @author Markus Ullrich
  */
-public class GaussianDistributionDatatype extends NumericDatatype {
+public class GaussianDistributionDataType extends NumericDataType {
 
     private double mean, standardDeviation;
     private Random random;
@@ -23,13 +23,14 @@ public class GaussianDistributionDatatype extends NumericDatatype {
     private DecimalFormat format;
 
     /**
-     * Generates a new {@link GaussianDistributionDatatype}.
+     * Generates a new {@link GaussianDistributionDataType}.
      * @param name - the name of this data type
      * @param mean - the mean value, also used as default
      * @param standardDeviation - the standard deviation for this distribution
      * @param integerMode - enforces the generation of integer values only
      */
-    public GaussianDistributionDatatype(String name, double mean, double standardDeviation, boolean integerMode) {
+    @SuppressWarnings("unused")
+    public GaussianDistributionDataType(String name, double mean, double standardDeviation, boolean integerMode) {
         super(name);
         this.mean = mean;
         this.standardDeviation = standardDeviation;
@@ -45,14 +46,14 @@ public class GaussianDistributionDatatype extends NumericDatatype {
     }
 
     /**
-     * Generates a new {@link GaussianDistributionDatatype}.
+     * Generates a new {@link GaussianDistributionDataType}.
      * @param name - the name of this data type
      * @param mean - the mean value, also used as default
      * @param standardDeviation - the standard deviation for this distribution
      * @param random - the random number generator that should be used by this data type
      * @param integerMode - enforces the generation of integer values only
      */
-    public GaussianDistributionDatatype(String name, double mean, double standardDeviation, Random random, boolean integerMode) {
+    public GaussianDistributionDataType(String name, double mean, double standardDeviation, Random random, boolean integerMode) {
         super(name);
         this.mean = mean;
         this.standardDeviation = standardDeviation;

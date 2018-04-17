@@ -9,7 +9,7 @@ import java.util.Locale;
  * This is a simple expression for a single numeric value.
  * This value will be returned every time the expression is evaluated.
  * Both data types are empty since no attributes are used.
- * Created by bissi on 13.03.2018.
+ * @author Markus Ullrich
  */
 public class SimpleNumberExpression implements IExpression {
 

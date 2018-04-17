@@ -6,23 +6,25 @@ import org.bissis.dm.generate.data.ProblemData;
 import org.bissis.dm.generate.expressions.MethodExpression;
 
 /**
- * Created by bissi on 13.03.2018.
+ * Class for a data type that uses an expression to generate its values.
+ * Thus, this type should only be used in conjunction with other data types it depends on.
+ * @author Markus Ullrich
  */
-public class ExpressionDataType extends NumericDatatype {
+public class ExpressionDataType extends NumericDataType {
 
     private IExpression expression;
     private ProblemData problemData;
     private boolean statisticalExpression;
 
     private String typeName;
+    //The expression might get a use in a later version
+    @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private Expression expressionType;
     private String secondPart;
 
     private String lastValue;
 
     private boolean useLastValue;
-
-    private boolean integerMode;
 
     /**
      * This data type represents an expression. Therefore, it will not generate random values but values based on other types.
@@ -59,16 +61,19 @@ public class ExpressionDataType extends NumericDatatype {
             String firstPart = expressionParts[0];
             String operator = expressionParts[1];
             String secondPart = expressionParts[2];
-            boolean orderSwitched = false;
-            boolean integerMode = false;
-            if (operator.equals("+")) {
-                this.expressionType = Expression.PLUS;
-            } else if (operator.equals("-")) {
-                this.expressionType = Expression.MINUS;
-            } else if (operator.equals("*")) {
-                this.expressionType = Expression.MULT;
-            } else if (operator.equals("/")) {
-                this.expressionType = Expression.DIV;
+            switch (operator) {
+                case "+":
+                    this.expressionType = Expression.PLUS;
+                    break;
+                case "-":
+                    this.expressionType = Expression.MINUS;
+                    break;
+                case "*":
+                    this.expressionType = Expression.MULT;
+                    break;
+                case "/":
+                    this.expressionType = Expression.DIV;
+                    break;
             }
             for (String dataType : this.problemData.getDataTypes()) {
                 if (dataType.equals(firstPart)) {
@@ -76,8 +81,8 @@ public class ExpressionDataType extends NumericDatatype {
                     for (String dataType2 : this.problemData.getDataTypes()) {
                         if (dataType2.equals(secondPart)) {
                             this.secondPart = secondPart;
-                            integerMode = ((NumericDatatype)this.problemData.getTypeForName(this.typeName)).allowIntegersOnly();
-                            this.expression = new ArithmeticExpression(this.typeName, secondPart, operator, integerMode, orderSwitched);
+                            boolean integerMode = ((NumericDataType)this.problemData.getTypeForName(this.typeName)).allowIntegersOnly();
+                            this.expression = new ArithmeticExpression(this.typeName, secondPart, operator, integerMode, false);
                             break;
                         }
                     }
@@ -86,19 +91,20 @@ public class ExpressionDataType extends NumericDatatype {
             }
             if (this.expression == null) {
                 if (!firstPart.equals(this.typeName)) {
-                    orderSwitched = true;
+                    //the order of the operands is different than the arithmetic expression expects
                     for (String dataType : this.problemData.getDataTypes()) {
                         if (dataType.equals(secondPart)) {
                             this.typeName = secondPart;
                             this.secondPart = firstPart;
-                            integerMode = ((NumericDatatype) this.problemData.getTypeForName(this.typeName)).allowIntegersOnly();
-                            this.expression = new ArithmeticExpression(this.typeName, operator, Double.parseDouble(firstPart), integerMode, orderSwitched);
+                            boolean integerMode = ((NumericDataType) this.problemData.getTypeForName(this.typeName)).allowIntegersOnly();
+                            this.expression = new ArithmeticExpression(this.typeName, operator, Double.parseDouble(firstPart), integerMode, true);
                             break;
                         }
                     }
                 } else {
                     this.secondPart = null;
-                    this.expression = new ArithmeticExpression(this.typeName, operator, Double.parseDouble(secondPart), integerMode, orderSwitched);
+                    //no integer mode is the default
+                    this.expression = new ArithmeticExpression(this.typeName, operator, Double.parseDouble(secondPart), false, false);
                 }
             }
         }
@@ -206,9 +212,10 @@ public class ExpressionDataType extends NumericDatatype {
 
     @Override
     public boolean allowIntegersOnly() {
-        return ((NumericDatatype)this.problemData.getTypeForName(this.typeName)).allowIntegersOnly();
+        return ((NumericDataType)this.problemData.getTypeForName(this.typeName)).allowIntegersOnly();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public enum Expression {
         MULT,
         DIV,
