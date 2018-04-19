@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.bissis.dm</groupId>
+    <groupId>org.ead</groupId>
     <artifactId>problem-generator</artifactId>
     <version>0.1</version>
     <name>BBDOB_Problem_Instance_Generator</name>
@@ -56,7 +56,7 @@
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
-                            <mainClass>org.bissis.dm.ProblemGenerator</mainClass>
+                            <mainClass>org.ead.ProblemGenerator</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
