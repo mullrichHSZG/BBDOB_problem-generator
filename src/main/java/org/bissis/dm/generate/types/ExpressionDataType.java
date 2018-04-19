@@ -202,12 +202,12 @@ public class ExpressionDataType extends NumericDataType {
 
     @Override
     public double getNextUpperBound() {
-        return getTotalUpperBound(); //TODO: it might not be the same value, depending on the expression, so another method needs to be provided for those as well
+        return this.expression.getNextMaxValue(this.problemData);
     }
 
     @Override
     public double getNextLowerBound() {
-        return getTotalLowerBound(); //TODO: same problem as with the next total upper bound
+        return this.expression.getNextMinValue(this.problemData);
     }
 
     @Override

@@ -61,6 +61,9 @@ public class RandomStepDataType extends NumericDataType {
         if (rows < 0) {
             throw new IllegalArgumentException("The number of rows must be larger than zero!");
         }
+        if (minIncrement * (rows) + start > stop) {
+            throw new IllegalArgumentException("The generator will exceed the stop value with these constraints!");
+        }
         this.minIncrement = minIncrement;
         this.maxIncrement = Math.max(minIncrement, Math.abs(stop - start) / (rows == 0 ? 1 : rows));
         this.lastIncrement = 0;

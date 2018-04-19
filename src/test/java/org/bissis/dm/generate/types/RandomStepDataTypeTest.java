@@ -19,7 +19,6 @@ public class RandomStepDataTypeTest {
         this.randomStepMinMax = new RandomStepDataType("MinMax", -12, 4, 20, new Random());
         this.randomStepMinStopRows = new RandomStepDataType("StopRows", 100, 10, new Random(), 1000, 50);
         //The extreme case does not allow for a different increment than 10, the generator should be able to allow these cases as well and fulfill them
-        //TODO: add test case like the one below with a higher start value --> an IllegalArgument(Boundaries)Exception is expected
         this.randomStepMinStopRowsExtreme = new RandomStepDataType("StopRowsExtreme", 10, 10, new Random(), 1000, 100);
     }
 
@@ -65,6 +64,14 @@ public class RandomStepDataTypeTest {
             lastGenMinStopRows = nextGenMinStopRows;
             Assert.assertEquals(Long.parseLong(lastGenMinStopRowsExtreme) + 10, Long.parseLong(nextGenMinStopRowsExtreme));
             lastGenMinStopRowsExtreme = nextGenMinStopRowsExtreme;
+        }
+        try {
+            this.randomStepMinStopRowsExtreme = new RandomStepDataType("StopRowsExtreme11", 11, 10, new Random(), 1000, 100);
+            Assert.fail("Creating a generator with these settings should not be allowed as it is impossible to fulfill these constraints.");
+        }catch(IllegalArgumentException ex) {
+            //OK
+        }catch(Exception e) {
+            Assert.fail("The wrong exception has been thrown. Expected an IllegalArgumentException instead of a " + e.getClass().getName() + ".");
         }
     }
 

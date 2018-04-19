@@ -75,8 +75,8 @@ public class MethodExpression implements IExpression {
 
     @Override
     public double getMinValue(ProblemData problemData) {
-        double lowerBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getTotalLowerBound();
-        double upperBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getTotalUpperBound();
+        double lowerBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getNextLowerBound();
+        double upperBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getNextUpperBound();
         switch (expression) {
             case ("sum"): {
                 return lowerBound * problemData.getConfiguration().getNumberOfRows();
@@ -118,6 +118,76 @@ public class MethodExpression implements IExpression {
                 return upperBound;
             }
             case ("abs"): {
+                return Math.max(Math.abs(upperBound), Math.abs(lowerBound));
+            }
+        }
+        return Double.NaN;
+    }
+
+    @Override
+    public double getNextMinValue(ProblemData problemData) {
+        double lowerBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getTotalLowerBound();
+        double upperBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getTotalUpperBound();
+        double[] doubleValues = new double[this.valueList.size() + 1];
+        double sum = 0.0;
+        for(int i = 0 ; i < doubleValues.length - 1 ; i++) {
+            doubleValues[i] = this.valueList.get(i);
+            sum += doubleValues[i];
+        }
+        sum += lowerBound;
+        doubleValues[this.valueList.size()] = lowerBound;
+        switch (expression) {
+            case ("sum"): {
+                return sum;
+            }
+            case ("avg"): {
+                return sum / doubleValues.length;
+            }
+            case ("min"): {
+                return ValueCompression.getMin(doubleValues);
+            }
+            case ("max"): {
+                return ValueCompression.getMax(doubleValues);
+            }
+            case ("abs"): {
+                if (lowerBound < 0 && upperBound > 0) {
+                    return 0.0;
+                }
+                return Math.min(Math.abs(lowerBound), Math.abs(upperBound));
+            }
+        }
+        return Double.NaN;
+    }
+
+    @Override
+    public double getNextMaxValue(ProblemData problemData) {
+        double lowerBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getTotalLowerBound();
+        double upperBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getTotalUpperBound();
+        double[] doubleValues = new double[this.valueList.size() + 1];
+        double sum = 0.0;
+        for(int i = 0 ; i < doubleValues.length - 1 ; i++) {
+            doubleValues[i] = this.valueList.get(i);
+            sum += doubleValues[i];
+        }
+        sum += upperBound;
+        doubleValues[this.valueList.size()] = upperBound;
+        switch (expression) {
+            case ("sum"): {
+                return sum;
+            }
+            case ("avg"): {
+                return sum / doubleValues.length;
+            }
+            case ("min"): {
+                return ValueCompression.getMin(doubleValues);
+            }
+            case ("max"): {
+                return ValueCompression.getMax(doubleValues);
+            }
+            case ("abs"): {
+                if (lowerBound < 0 && upperBound > 0) {
+                    return 0.0;
+                }
                 return Math.max(Math.abs(upperBound), Math.abs(lowerBound));
             }
         }

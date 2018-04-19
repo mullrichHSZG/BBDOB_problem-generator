@@ -57,4 +57,14 @@ public class SimpleNumberExpression implements IExpression {
     public double getMaxValue(ProblemData problemData) {
         return number;
     }
+
+    @Override
+    public double getNextMinValue(ProblemData problemData) {
+        return number;
+    }
+
+    @Override
+    public double getNextMaxValue(ProblemData problemData) {
+        return number;
+    }
 }

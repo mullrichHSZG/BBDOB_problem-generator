@@ -98,7 +98,6 @@ public class TestDataGenerator {
 		if (!this.checkConstraints()) {
 			throw new IllegalStateException("Some constraints cannot be met, please check the configuration and try again.");
 		}
-		//TODO: RegExp support
 
 		if(!testDataFile.exists()){
 			//noinspection ResultOfMethodCallIgnored

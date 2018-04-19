@@ -91,7 +91,7 @@ public class GaussianDistributionDataType extends NumericDataType {
     @Override
     public long getTotalDistinctValues() {
         if (this.integerMode) {
-            return (int)standardDeviation * 6 + 1; //TODO: again, this should be configurable
+            return (int)standardDeviation * 6 + 1;
         }
         return Long.MAX_VALUE;
     }

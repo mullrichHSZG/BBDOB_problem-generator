@@ -8,6 +8,7 @@ import org.bissis.dm.generate.types.ExpressionDataType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -18,8 +19,8 @@ public class ProblemGenerationConfiguration {
 
     private long globalSeed;
     private Random globalRandom;
-    private String version = "v0.1"; //TODO: read version from pom? - probably not, since the version should not be utilized
-    private List<String> comments; //TODO: ensure that future implementations will generate the same values every time - what about bug fixes?
+    private String version;
+    private List<String> comments;
     private String problemName;
     private boolean noDuplicates;
     private boolean printParameters;
@@ -44,6 +45,16 @@ public class ProblemGenerationConfiguration {
     public ProblemGenerationConfiguration(JSONObject jsonConfig) {
         this.problemData = new ProblemData();
         this.version = (String) jsonConfig.get("version");
+        if (this.version == null) {
+            try {
+                Properties projectProperties = new Properties();
+                projectProperties.load(this.getClass().getClassLoader().getResourceAsStream("project.properties"));
+                this.version = projectProperties.getProperty("version");
+                System.out.println("Version has not been provided, using current version of the generator instead. (v" + this.version + ")");
+            } catch (IOException e) {
+                //Properties could not be read
+            }
+        }
         Long globalSeed = (Long) jsonConfig.get("seed");
         if(globalSeed != null) {
             this.globalSeed = globalSeed;

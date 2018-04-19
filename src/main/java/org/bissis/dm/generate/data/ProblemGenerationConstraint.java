@@ -276,12 +276,19 @@ public class ProblemGenerationConstraint {
         return false;
     }
 
-    boolean isStillPossible(long remainingRows, String currentLeft, String currentRight, ProblemData problemData) {
+    boolean isStillPossible(long remainingRows, ProblemData problemData, String value) {
         //TODO: works only if all values are numeric for now
+
+        String secondLeft = getLeft().getSecondDataTypeName();
+        String currentLeft = getLeft().evaluate(value, problemData.getLastValueFor(secondLeft));
+        String compareWith = getRight().getDataTypeName();
+        String secondRight = getRight().getSecondDataTypeName();
+        String currentRight = getRight().evaluate(problemData.getLastValueFor(compareWith), problemData.getLastValueFor(secondRight));
+
         if (currentRight == null) {
             return true;
         }
-        double leftValue = Double.parseDouble(currentLeft);//this.left.evaluate(currentLeft, problemData.getLastValueFor(this.left.getSecondDataTypeName())));
+        double leftValue = Double.parseDouble(currentLeft);
 
         //Only in case the constraint is global!
         /*
@@ -314,7 +321,7 @@ public class ProblemGenerationConstraint {
             }
         }*/
 
-        double rightValue = Double.parseDouble(currentRight);//this.right.evaluate(currentRight, problemData.getLastValueFor(this.right.getSecondDataTypeName())));
+        double rightValue = Double.parseDouble(currentRight);
 
         //Only in case the constraint is global!
         /*

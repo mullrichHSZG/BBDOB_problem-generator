@@ -172,4 +172,36 @@ public class ArithmeticExpression implements IExpression {
         }
         return Double.parseDouble(this.format.format(returnValue));
     }
+
+    @SuppressWarnings("Duplicates")
+    @Override
+    public double getNextMinValue(ProblemData problemData) {
+        double returnValue = Double.NaN;
+        double lowerBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getNextLowerBound();
+        double upperBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getNextUpperBound();
+        if (useSecondValue) {
+            double secondLowerBound = ((NumericDataType) problemData.getTypeForName(this.secondDataTypeName)).getNextLowerBound();
+            double secondUpperBound = ((NumericDataType) problemData.getTypeForName(this.secondDataTypeName)).getNextUpperBound();
+            returnValue = evaluateMinExpression(returnValue, lowerBound, upperBound, secondLowerBound, secondUpperBound);
+        } else {
+            returnValue = evaluateMinExpression(returnValue, lowerBound, upperBound, secondValue, secondValue);
+        }
+        return Double.parseDouble(this.format.format(returnValue));
+    }
+
+    @SuppressWarnings("Duplicates")
+    @Override
+    public double getNextMaxValue(ProblemData problemData) {
+        double returnValue = Double.NaN;
+        double lowerBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getNextLowerBound();
+        double upperBound = ((NumericDataType) problemData.getTypeForName(this.dataTypeName)).getNextUpperBound();
+        if (useSecondValue) {
+            double secondLowerBound = ((NumericDataType) problemData.getTypeForName(this.secondDataTypeName)).getNextLowerBound();
+            double secondUpperBound = ((NumericDataType) problemData.getTypeForName(this.secondDataTypeName)).getNextUpperBound();
+            returnValue = evaluateMinExpression(returnValue, upperBound, lowerBound, secondUpperBound, secondLowerBound);
+        } else {
+            returnValue = evaluateMinExpression(returnValue, upperBound, lowerBound, secondValue, secondValue);
+        }
+        return Double.parseDouble(this.format.format(returnValue));
+    }
 }

@@ -49,7 +49,6 @@ public class ProblemGenerator {
                             }
 
                             System.exit(0);
-                            //TODO: check statistical properties of the output instances?
                         }
                     }
                 }

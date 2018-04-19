@@ -14,7 +14,7 @@ import java.util.*;
  * @author Markus Ullrich
  *
  */
-public class NumericGenerateDataType extends NumericDataType {
+public class NumericGenerateDataType extends NumericDataType implements PreGeneratedListGenerator{
 
 	private double lowerBound, upperBound, defaultValue;
 	private CompressionList<Double> compressedValues;
@@ -232,22 +232,6 @@ public class NumericGenerateDataType extends NumericDataType {
 	@Override
 	public void resetLastValue() {
 		this.valueIndex--;
-		reShuffleCounter++;
-		if (reShuffleCounter >= 100) {
-			reShuffleCounter = 0;
-			//possibly too many failed attempts using the next value from the pre-generated list
-			//in case a list is used, the remaining values will be re-shuffled
-            //TODO: this is a side effect and should be moved to a different method
-			if (!this.valueList.isEmpty()) {
-				List<Double> replacementList = new ArrayList<>();
-				for (int i = valueIndex ; i < this.valueList.size() ; i++){
-					replacementList.add(this.valueList.get(i));
-				}
-				Collections.shuffle(replacementList, this.random);
-				this.valueList = replacementList;
-				this.valueIndex = 0;
-			}
-		}
 	}
 
 	@Override
@@ -262,5 +246,18 @@ public class NumericGenerateDataType extends NumericDataType {
 	@Override
 	public long getNextDistinctValues() {
 		return this.getTotalDistinctValues();
+	}
+
+	@Override
+	public void shuffleRemainingValues() {
+		if (!this.valueList.isEmpty()) {
+			List<Double> replacementList = new ArrayList<>();
+			for (int i = valueIndex; i < this.valueList.size(); i++) {
+				replacementList.add(this.valueList.get(i));
+			}
+			Collections.shuffle(replacementList, this.random);
+			this.valueList = replacementList;
+			this.valueIndex = 0;
+		}
 	}
 }

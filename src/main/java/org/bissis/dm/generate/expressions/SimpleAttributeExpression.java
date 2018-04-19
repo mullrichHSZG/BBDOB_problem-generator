@@ -46,4 +46,14 @@ public class SimpleAttributeExpression implements IExpression {
     public double getMaxValue(ProblemData problemData) {
         return ((NumericDataType) problemData.getTypeForName(this.name)).getTotalUpperBound();
     }
+
+    @Override
+    public double getNextMinValue(ProblemData problemData) {
+        return ((NumericDataType) problemData.getTypeForName(this.name)).getNextLowerBound();
+    }
+
+    @Override
+    public double getNextMaxValue(ProblemData problemData) {
+        return ((NumericDataType) problemData.getTypeForName(this.name)).getNextUpperBound();
+    }
 }
