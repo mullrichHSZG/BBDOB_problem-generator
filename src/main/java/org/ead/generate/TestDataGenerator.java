@@ -29,13 +29,24 @@ public class TestDataGenerator {
 		this.config = config;
 	}
 
-	private boolean checkConstraints() {
+	private boolean checkConstraints(IGenerateDataType[] order) {
 		boolean constraintsMet = true;
 		if (config.isNoDuplicates()) {
 			long possibleDistinctRows = 1;
 			for (ProblemGenerationAttribute attribute : this.config.getProblemGenerationAttributeList()) {
-				if (attribute.isOutput())
-					possibleDistinctRows *= attribute.getType().getTotalDistinctValues();
+				if (attribute.isOutput()) {
+					long totalDistinctValues = attribute.getType().getTotalDistinctValues();
+					for (ProblemGenerationConstraint constraint : this.config.getProblemGenerationConstraintList()) {
+						if (constraint.getRelation() == ProblemGenerationConstraint.Relation.E  &&
+								((attribute.getType().getName().equals(constraint.getLeft().getDataTypeName()) &&
+								Arrays.binarySearch(order, attribute.getType()) > Arrays.binarySearch(order, constraint.getLeft().getSecondDataTypeName())) ||
+										(attribute.getType().getName().equals(constraint.getLeft().getSecondDataTypeName()) &&
+										Arrays.binarySearch(order, attribute.getType()) > Arrays.binarySearch(order, constraint.getLeft().getDataTypeName())))) {
+							totalDistinctValues = 1;
+						}
+					}
+					possibleDistinctRows *= totalDistinctValues;
+				}
 				if (possibleDistinctRows >= config.getNumberOfRows())
 					break;
 			}
@@ -43,6 +54,14 @@ public class TestDataGenerator {
 		}
 		for (ProblemGenerationConstraint constraint : config.getProblemGenerationConstraintList()) {
 			constraintsMet &= constraint.isPossible();
+		}
+		for (ProblemGenerationAttribute attribute : this.config.getProblemGenerationAttributeList()) {
+			if (attribute.isUseAllValues()) {
+				if (attribute.getType().getTotalDistinctValues() > config.getNumberOfRows()) {
+					constraintsMet = false;
+					break;
+				}
+			}
 		}
 		return constraintsMet;
 	}
@@ -95,7 +114,7 @@ public class TestDataGenerator {
 		config.getProblemData().setConfiguration(config);
 		String valueSeparator = config.getSeparator();
 		IGenerateDataType[] order = this.orderTypesByConstraints();
-		if (!this.checkConstraints()) {
+		if (!this.checkConstraints(order)) {
 			throw new IllegalStateException("Some constraints cannot be met, please check the configuration and try again.");
 		}
 

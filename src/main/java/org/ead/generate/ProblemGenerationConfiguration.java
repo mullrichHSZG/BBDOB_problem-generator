@@ -61,6 +61,8 @@ public class ProblemGenerationConfiguration {
             this.globalRandom = new Random(this.globalSeed);
         } else {
             this.globalRandom = new Random();
+            this.globalSeed = this.globalRandom.nextLong();
+            this.globalRandom.setSeed(this.globalSeed);
         }
         this.numberOfRows = (Long) jsonConfig.get("rows");
         this.problemName = (String) jsonConfig.get("problem");

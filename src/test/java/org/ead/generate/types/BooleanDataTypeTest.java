@@ -12,6 +12,7 @@ import java.util.Random;
  */
 public class BooleanDataTypeTest {
 
+    public static final double DELTA1000 = 50.0;
     private BooleanDataType bool02, bool05, bool00, bool10, bool08;
 
     @Before
@@ -95,13 +96,13 @@ public class BooleanDataTypeTest {
         }
         double expectedValue = generatedValues * 0.2;
         Assert.assertEquals("The expected number of generated 'true' values out of " + generatedValues + " for a generator" +
-                " with a truePercentage of 0.2 should be roughly " + expectedValue + ".", expectedValue, bool02Total, 25.0);
+                " with a truePercentage of 0.2 should be roughly " + expectedValue + ".", expectedValue, bool02Total, DELTA1000);
         expectedValue = generatedValues * 0.5;
         Assert.assertEquals("The expected number of generated 'true' values out of " + generatedValues + " for a generator" +
-                " with a truePercentage of 0.5 should be roughly " + expectedValue + ".", expectedValue, bool05Total, 25.0);
+                " with a truePercentage of 0.5 should be roughly " + expectedValue + ".", expectedValue, bool05Total, DELTA1000);
         expectedValue = generatedValues * 0.8;
         Assert.assertEquals("The expected number of generated 'true' values out of " + generatedValues + " for a generator" +
-                " with a truePercentage of 0.8 should be roughly " + expectedValue + ".", expectedValue, bool08Total, 25.0);
+                " with a truePercentage of 0.8 should be roughly " + expectedValue + ".", expectedValue, bool08Total, DELTA1000);
     }
 
     @Test
@@ -179,13 +180,13 @@ public class BooleanDataTypeTest {
         }
         double expectedValue = generatedValues * 0.2;
         Assert.assertEquals("The expected number of generated 'true' values out of " + generatedValues + " for a generator" +
-                " with a truePercentage of 0.2 should be roughly " + expectedValue + ".", expectedValue, bool02Total, 25.0);
+                " with a truePercentage of 0.2 should be roughly " + expectedValue + ".", expectedValue, bool02Total, DELTA1000);
         expectedValue = generatedValues * 0.5;
         Assert.assertEquals("The expected number of generated 'true' values out of " + generatedValues + " for a generator" +
-                " with a truePercentage of 0.5 should be roughly " + expectedValue + ".", expectedValue, bool05Total, 25.0);
+                " with a truePercentage of 0.5 should be roughly " + expectedValue + ".", expectedValue, bool05Total, DELTA1000);
         expectedValue = generatedValues * 0.8;
         Assert.assertEquals("The expected number of generated 'true' values out of " + generatedValues + " for a generator" +
-                " with a truePercentage of 0.8 should be roughly " + expectedValue + ".", expectedValue, bool08Total, 25.0);
+                " with a truePercentage of 0.8 should be roughly " + expectedValue + ".", expectedValue, bool08Total, DELTA1000);
     }
 
     @Test

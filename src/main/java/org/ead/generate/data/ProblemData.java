@@ -76,14 +76,23 @@ public class ProblemData {
                         boolean duplicateNotPreventable = true;
                         long potentialCombinations = 0;
                         for (int secondIndex = index + 1; secondIndex < order.length; secondIndex++) {
-                            if (order[secondIndex].getTotalDistinctValues() > potentialDuplicateRowCount) {
+                            long secondTotalDistinctValues = order[secondIndex].getTotalDistinctValues();
+                            for (ProblemGenerationConstraint constraint : constraints) {
+                                if (constraint.getRelation() == ProblemGenerationConstraint.Relation.E  &&
+                                        (order[secondIndex].getName().equals(constraint.getLeft().getDataTypeName())) ||
+                                        order[secondIndex].getName().equals(constraint.getLeft().getSecondDataTypeName())) {
+                                    secondTotalDistinctValues = 1;
+                                }
+                            }
+                            if (secondTotalDistinctValues > potentialDuplicateRowCount) {
+                                //TODO: find more useful location (reuse this code)
                                 duplicateNotPreventable = false;
                                 break;
                             }
                             if (potentialCombinations == 0) {
-                                potentialCombinations += order[secondIndex].getTotalDistinctValues();
+                                potentialCombinations += secondTotalDistinctValues;
                             } else {
-                                potentialCombinations *= order[secondIndex].getTotalDistinctValues();
+                                potentialCombinations *= secondTotalDistinctValues;
                             }
                         }
                         duplicateNotPreventable &= potentialCombinations <= potentialDuplicateRowCount;

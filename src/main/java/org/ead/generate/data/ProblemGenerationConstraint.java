@@ -384,7 +384,7 @@ public class ProblemGenerationConstraint {
         GLOBAL
     }
 
-    private enum Relation {
+    public enum Relation {
         GT,
         LT,
         GE,

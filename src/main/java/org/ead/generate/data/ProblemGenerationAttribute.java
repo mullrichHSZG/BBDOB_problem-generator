@@ -156,5 +156,9 @@ public class ProblemGenerationAttribute {
     public boolean isOutputProbabilitySet() {
         return outputProbabilitySet;
     }
+
+    public boolean isUseAllValues() {
+        return useAllValues;
+    }
 }
 
